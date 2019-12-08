@@ -13,42 +13,59 @@ const COLORS_9 = {
 /* Your code goes here! */
 
 //Create a variable `h1` that refers to the `<h1>` element in the DOM.
-
+var h1 = document.querySelector('h1');
 
 //Change the `textContent` of the `<h1>` element to be "Which Swatch?"
+h1.textContent = "Which Swatch?";
 
 
 //Somehow the rainbow icon image was included without an alt tag! Set its `alt`
 //attribute to be "A beautiful rainbow".
-
+var img = document.querySelector('img')
+img.alt = "A beautiful rainbow";
 
 //Give the image the Bootstrap-provided `float-right` CSS class to make it float
 //to the right of the screen
+img.classList.add('float-right');
 
 
 //The icon requires attribution, which is included in the footer. Wrap this
 //attribution (the entire contents of the footer) inside a `<small>` element,
-//So that the footer should contain a `<small>` element which contains the 
+//So that the footer should contain a `<small>` element which contains the
 //current content.
 //Be careful to preserve the HTML!
+let newSmall = document.createElement('small');
+let footer = document.querySelector('footer');
+while (footer.firstChild) {
+  newSmall.appendChild(footer.firstChild);
+}
+footer.appendChild(newSmall);
 
 
-//Define a function `createColorBox()` that takes in two parameters: a color 
-//string and a numeric size. The function should return a _new_ `<div>` element 
+//Define a function `createColorBox()` that takes in two parameters: a color
+//string and a numeric size. The function should return a _new_ `<div>` element
 //that is a colored box with the following details:
 // - has a CSS class of `d-inline-block`
 // - has a CSS inline style `background-color` that is the given color
-// - has CSS inline style `width` and `height` properties that are both the 
+// - has CSS inline style `width` and `height` properties that are both the
 //   passed in size (in `px`)
 //You can test this function by logging out the returned value.
 
+function createColorBox (color, size) {
+  let div = document.createElement('div');
+  div.className = 'd-inline-block';
+  div.style.backgroundColor = color;
+  div.style.width = size + "px";
+  div.style.height = size + "px";
+  return div;
+}
 
 
 //Define a function `renderPalette()` that takes in an array of color strings
-//and a "parent" DOM element. The function should add a row of colored boxes to the 
+//and a "parent" DOM element. The function should add a row of colored boxes to the
 //parent element, one for each color (each created with `createColorBox()`).
 //The boxes should be each take up an equal portion of their containing element
-//(e.g., a palette with 3 colors will have each box take up 1/3 of the parent); 
+//(e.g., a palette with 3 colors will have each box take up 1/3 of the parent);
 //call the `getBoundingClientRect()` method on the parent to get an object with
 //the parent's size values.
 //
@@ -58,6 +75,13 @@ const COLORS_9 = {
 //
 //Note that you should NOT include this test call for the tester!
 
+function renderPalette(colorArray, parent) {
+  let i = 0;
+  for(i = 0; i < colorArray.length; i++) {
+    let domRect = parent.getBoundingClientRect();
+    parent.appendChild(createColorBox(colorArray[i],  domRect.width / colorArray.length));
+  }
+}
 
 
 //Define a function `renderPaletteTable()` that will render a color palette row
@@ -68,7 +92,13 @@ const COLORS_9 = {
 //
 //Call your `renderPaletteTable()` method to show all the color palettes.
 
-
+function renderPaletteTable() {
+  const values = Object.values(COLORS_9);
+  for(var i = 0; i < values.length; i++) {
+    renderPalette(values[i], document.querySelector('main'));
+  }
+}
+renderPaletteTable();
 
 //Finally, remove the paragraph that explains how to complete the problem
 
@@ -77,8 +107,8 @@ const COLORS_9 = {
 //Make functions and variables available to tester. DO NOT MODIFY THIS.
 if(typeof module !== 'undefined' && module.exports){
   /* eslint-disable */
-  if(typeof createColorBox !== 'undefined') 
+  if(typeof createColorBox !== 'undefined')
     module.exports.createColorBox = createColorBox;
-  if(typeof renderPalette !== 'undefined') 
+  if(typeof renderPalette !== 'undefined')
     module.exports.renderPalette = renderPalette;
 }
